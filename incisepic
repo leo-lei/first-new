@@ -1,0 +1,47 @@
+
+//--------------------------------------【程序说明】-------------------------------------------
+//		程序说明：《OpenCV3编程入门》OpenCV2版书本配套示例程序95
+//		程序描述：ORB的关键点和描述符的提取，使用FLANN-LSH进行匹配
+//		开发测试所用操作系统： Windows 7 64bit
+//		开发测试所用IDE版本：Visual Studio 2010
+//		开发测试所用OpenCV版本：	2.4.9
+
+
+//---------------------------------【头文件、命名空间包含部分】----------------------------
+//		描述：包含程序所使用的头文件和命名空间
+//------------------------------------------------------------------------------------------------
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>    
+#include <opencv2/imgproc/types_c.h>
+#include <opencv2/highgui/highgui_c.h>
+#include <iostream>
+using namespace cv;
+using namespace std;
+
+int main()
+{
+	Mat image;
+	image = imread("D:\\lyf.jpg");//改成自己的图片路径
+	//cvtColor(image,image,COLOR_BGR2GRAY);
+	int minSize = 30, maxSize = 100;  //切图的大小范围是30*30-100*100
+	int number = 400;  //切400 个图
+	for (int i = 0; i < number; i++)
+	{
+		int x = rand() % (image.cols - maxSize * 2) + maxSize, 
+			y = rand() % (image.rows - maxSize * 2) + maxSize, 
+			r = rand() % (maxSize - 2 * minSize) + minSize;
+		Mat sub_src;
+		Rect rect(x, y, r, r);
+		image(rect).copyTo(sub_src);
+		string tempDir = "D:\\DD\\";   //切好后的图的储存路径
+		stringstream ss;
+		ss << i;
+		string str = ss.str();// 给图像命名为 1.jpg 2.jpg ……
+		tempDir += str;
+		tempDir += ".jpg";
+		imwrite(tempDir, sub_src);
+	}
+}
